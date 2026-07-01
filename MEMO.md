@@ -7,8 +7,11 @@ The reference servers ship with stdio transport — they communicate over stdin/
 As the developers state, this server is also able to access local/internal IP addresses and can pose a security risk. This includes SSRF (Server-Side-Request-Foregery), where an attacker tricks a server into making unauthorized requests on their behalf. 
 
 ### Commands to Test Integration
-npm install
-npm run build
+#1. npm install
+
+#2. npm run build
+
+#3. npm run start:streamableHttp
 
 ### Product Comparison Table: Original Server vs. Secured Version
 
