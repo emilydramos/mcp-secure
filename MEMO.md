@@ -6,6 +6,12 @@ The reference servers ship with stdio transport — they communicate over stdin/
 
 As the developers state, this server is also able to access local/internal IP addresses and can pose a security risk. This includes SSRF (Server-Side-Request-Foregery), where an attacker tricks a server into making unauthorized requests on their behalf. 
 
+### Running the Server Locally
+
+Initial approach: When I attempted to build and execute the server locally using standard npm install and npm run build workflows within the cloned repository, dependency conflicts and workspace compilation errors emerged in other sub-projects across the monorepo (e.g., missing dependencies like chalk in the adjacent sequentialthinking package). This locked the global building phase and initially blocked standard node or npm run execution states.
+
+Using NPX: After using npx, I was able to get the server to run. Npx (Node Package Executer) downloads and runs a clean, pre-compiled, and published version of the package directly from the remote npm registry into a temporary cache. By using npx, it completely bypassed the local file system structure, local code alterations, and broken neighboring workspace configurations.
+
 ### Commands to Test Integration
 Navigate to the directory: `cd src/everything`
 
@@ -47,4 +53,6 @@ The files changed were the package.json and the index.ts file. The auth.ts file 
 ### Developer Experience 
 What was easy: The drop-in Express integration hook is highly intuitive. It keeps code readability intact without modifying complex nested JSON-RPC parsing internals.
 
-What was Difficult: Local developer debugging can loop into state inconsistencies if the inspector frontend caches old configurations or requires a local test authorization server wrapper.  Production Adaptations Needed: Before scaling to live endpoints, a stable token caching scheme must be defined, local mock authentication configs switched off, and proper CORS rules explicitly mapped.
+What was difficult: Local developer debugging can loop into state inconsistencies if the inspector frontend caches old configurations or requires a local test authorization server wrapper.  
+
+Production Adaptations Needed: Before scaling to live endpoints, a stable token caching scheme must be defined, local mock authentication configs switched off, and proper CORS rules explicitly mapped.
