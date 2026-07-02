@@ -15,7 +15,7 @@ Compile the environment: `npm run build`
 
 Spin up the server: `npm run start:streamableHttp`
 
-Test validation with cURL (Should yield authorization rejection):  `curl -X POST http://localhost:3000/mcp -d "{}"`
+Test validation with cURL (Should yield authorization rejection):  curl -X POST http://localhost:3001/mcp -d "{}" -H "Content-Type: application/json"
 
 ### Product Comparison Table: Original Server vs. Secured Version
 
