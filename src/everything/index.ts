@@ -18,7 +18,7 @@ async function run() {
         break;
       case "streamableHttp":
         // Import and run the streamable HTTP server
-        await import("./transports/streamableHttp.js");
+        await import("./streamableHttp.js";);
         break;
       default:
         console.error(`-`.repeat(53));
