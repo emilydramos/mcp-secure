@@ -3,7 +3,7 @@ import {
   EventStore,
 } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express, { Request, Response } from "express";
-import { createServer } from "../server/index.js";
+import { createServer } from "../../server/index.js";
 import { randomUUID } from "node:crypto";
 import cors from "cors";
 
