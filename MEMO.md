@@ -15,13 +15,16 @@ Using NPX: After using npx, I was able to get the server to run. Npx (Node Packa
 ### Commands to Test Integration
 Navigate to the directory: `cd src/everything`
 
-Fetch dependencies: `npm install`
+Fetch dependencies (installs official Authplane SDKs): `npm install`
 
-Compile the environment: `npm run build`
+Compile the environment safely (isolates compilation to this folder): `npx tsc`
 
 Spin up the server: `npm run start:streamableHttp`
 
-Test validation with cURL (Should yield authorization rejection):  curl -X POST http://localhost:3001/mcp -d "{}" -H "Content-Type: application/json"
+Test validation with cURL (Should yield authorization rejection from the Authplane SDK middleware):  
+curl -X POST http://localhost:3001/mcp -d "{}" -H "Content-Type: application/json"
+
+### Product Comparison Table: Original Server vs. Secured Version
 
 ### Product Comparison Table: Original Server vs. Secured Version
 
@@ -29,8 +32,8 @@ Test validation with cURL (Should yield authorization rejection):  curl -X POST 
 | :--- | :--- | :--- |
 | **Authentication Model** | None. Relies purely on local OS process boundary (`STDIO`) or completely open network sockets. | Token-based (OAuth 2.1 / Bearer JWT) with automated scope verification. |
 | **Developer Effort** | Zero out-of-the-box overhead. | Minimal. Seamless drop-in Express middleware wrapping standard handlers. |
-| **Security Posture** | Vulnerable to arbitrary tool invocation or data leakage if exposed over an open network port. | Zero-Trust. Requests missing a valid token or appropriate scope are rejected with an explicit `InsufficientScopeError`. |
-| **Deployment Complexity** | Extremely trivial, localized to a single machine. | Medium. Requires pointing to an active Authplane authorization server (or self-hosted `authserver` container). |
+| **Security Posture** | Vulnerable to arbitrary tool invocation or data leakage if exposed over an open network port. | Zero-Trust. Requests missing a valid token or appropriate scope are rejected natively by the official SDK middleware. |
+| **Deployment Complexity** | Extremely trivial, localized to a single machine. | Medium. Installs production dependencies via `@authplane/mcp` and hooks directly into the Express application lifecycle. |
 | **Documentation Quality** | Focuses entirely on showcasing MCP primitives, completely omitting production security guidelines. | High. Clear SDK references for middleware instantiation and scope requirement mapping. |
 | **Auditability or Observability** | Missing. Client actions are logged anonymously with no identity attribution. | High. Requests map cryptographically to individual client IDs, tokens, and specific authorization contexts. |
 | **Known Limitations** | Cannot be safely exposed to webhooks or cross-machine agent execution. | Network latency overhead added per token crypt-validation trip. |
