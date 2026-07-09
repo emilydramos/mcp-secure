@@ -7,8 +7,7 @@ import { createServer } from "../../server/index.js";
 import { randomUUID } from "node:crypto";
 import cors from "cors";
 
-// (NEW) Import the Authplane security initializer
-import { initializeSecurity } from "./auth.js";
+import { authplaneMcpAuth } from "@authplane/mcp";
 
 // Simple in-memory event store for SSE resumability
 class InMemoryEventStore implements EventStore {
@@ -64,9 +63,13 @@ async function main() {
     })
   );
 
-  // (NEW) Initialize and apply Authplane security layers globally to downstream routes
-  const security = await initializeSecurity();
-  app.use(security.bearerAuth);
+const authplane = authplaneMcpAuth({
+  resource: "http://localhost:3001",
+  scopes: ["mcp:all"],
+  devMode: true
+  });
+
+  app.use(authplane.bearerAuth);
 
   // Handle POST requests for client messages
   app.post("/mcp", async (req: Request, res: Response) => {
