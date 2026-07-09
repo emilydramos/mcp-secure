@@ -42,13 +42,11 @@ The repository selected was the modelcontextprotocol/servers repository. It prov
 ### Current Authentication & Security Posture
 By default, the Model Context Protocol presumes isolation over standard input/output (`stdio`) child process boundaries. When shifted onto open TCP ports via HTTP or SSE (Server-Sent Events), the implementation natively exposes all features anonymously with zero access validation tokens or origin checks, permitting arbitrary command invocation.
 
-### Explanation of Integration
-The architecture decouples configuration parameters via `src/everything/auth.ts`. An initialization routine creates the Express-integrated middleware `bearerAuth` via `@authplane/mcp`. 
-
-The middleware interceptor sits strictly upstream of the `/sse` and `/mcp` endpoints. Any incoming client payload lacking an authorized JWT header matching the required authorization scopes (`tools/execute`) is blocked directly at the gateway with an immediate error response.
+### Authplane Integration
+The secure server configuration was successfully achieved by integrating the official @authplane/mcp SDK package directly into the Express pipeline within src/everything/streamableHttp.ts. By invoking the authentic authplaneMcpAuth middleware factory, the server maps an automated token-verification gateway over its network transport layer, configured with an active target resource uri, a broad scope target (mcp:all), and local development mode enabled to bypass remote TLS requirements during validation tests. This official middleware sits upstream of all core execution routes, intercepting incoming HTTP and SSE payloads globally to cryptographically validate the client's Authorization: Bearer <token> header, immediately dropping unauthenticated requests with standard OAuth 2.1 protocol errors before they can interface with the underlying Model Context Protocol engine.
 
 ### Files Modified/Added
-The files changed were the package.json and the index.ts file. The auth.ts file was added. 
+The files modified were package.json, index.ts, and streamableHttp.ts to implement the official SDK hooks.
 
 ### Developer Experience 
 What was easy: The drop-in Express integration hook is highly intuitive. It keeps code readability intact without modifying complex nested JSON-RPC parsing internals.
